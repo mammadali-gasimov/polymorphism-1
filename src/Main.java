@@ -3,60 +3,49 @@ import java.util.Scanner;
 
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
+    public static School school = new School();
 
     public static void main(String[] args) {
-        Classroom classroom = new Classroom();
-        School school = new School(classroom);
-
-        System.out.println("Enter unique id for classroom:");
-
-        classroom.uniqueId = scanner.nextInt();
-        classroom.teacher = (Teacher) getHuman(true);
-
-        System.out.println("How many students you want to add?");
-        int studentCount = scanner.nextInt();
-        int count = 0;
-        Student[] students = new Student[studentCount];
-        while (count < studentCount) {
-            students[count] = (Student) getHuman(false);
-            count++;
+        while (true) {
+            showMenu();
+            getUserChoice();
         }
-
-        System.out.println(Arrays.toString(students));
-        classroom.students = students;
     }
 
-    public static Human getHuman(boolean isTeacher) {
-        System.out.println("Enter name:");
-        String name = scanner.nextLine();
+    public static void showMenu() {
+        System.out.println("Enter 1 to show all classrooms:");
+        System.out.println("Enter 2 to show all teachers:");
+        System.out.println("Enter 3 to show all students:");
+        System.out.println("Enter 4 to show students by classroom id:");
+        System.out.println("Enter 5 to add classroom:");
+        System.out.println("Enter 6 to add a student to classroom:");
+    }
 
-        System.out.println("Enter surname:");
-        String surname = scanner.nextLine();
-
-        System.out.println("Enter age:");
-        int age = scanner.nextInt();
-
-        Human human;
-        if (isTeacher) {
-            human = getTeacher(name, surname, age);
-        } else {
-            human = getStudent(name, surname, age);
+    public static void getUserChoice() {
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                school.showAllClassrooms();
+                break;
+            case 2:
+                school.showAllTeachers();
+                break;
+            case 3:
+                school.showAllStudents();
+                break;
+            case 4:
+                System.out.println("Enter classroom id to get all students in that classroom:");
+                int id = scanner.nextInt();
+                school.showAllStudentsByClassroom(id);
+                break;
+            case 5:
+                System.out.println("Enter unique classroom id:");
+                school.addClassRoom(scanner.nextInt(), scanner);
+                break;
+            case 6:
+                System.out.println("Enter classroom id:");
+                school.addStudentToClassroom(scanner.nextInt(), scanner);
+                break;
         }
-
-        return human;
-    }
-
-    public static Teacher getTeacher(String name, String surname, int age) {
-        System.out.println("Enter salary:");
-        double salary = scanner.nextDouble();
-
-        return new Teacher(name, surname, age, salary);
-    }
-
-    public static Student getStudent(String name, String surname, int age) {
-        System.out.println("Enter point:");
-        int point = scanner.nextInt();
-
-        return new Student(name, surname, age, point);
     }
 }
